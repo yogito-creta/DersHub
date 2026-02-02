@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <title>DersHub / Yiğit</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #0f172a;
+      color: #fff;
+      text-align: center;
+      padding: 30px;
+    }
+
+    h1 {
+      margin-bottom: 5px;
+    }
+
+    textarea {
+      width: 90%;
+      max-width: 600px;
+      height: 130px;
+      border-radius: 8px;
+      padding: 10px;
+      font-size: 16px;
+      border: none;
+      outline: none;
+      margin-top: 15px;
+    }
+
+    button {
+      margin-top: 15px;
+      padding: 10px 25px;
+      font-size: 16px;
+      cursor: pointer;
+      background: #38bdf8;
+      border: none;
+      border-radius: 6px;
+    }
+
+    button:hover {
+      background: #0ea5e9;
+    }
+
+    pre {
+      background: #020617;
+      padding: 15px;
+      border-radius: 8px;
+      width: 90%;
+      max-width: 600px;
+      margin: 20px auto;
+      text-align: left;
+      white-space: pre-wrap;
+    }
+  </style>
+</head>
+
+<body>
+
+  <h1>📚 DersHub - Demo</h1>
+  <p>Takıldığın soruyu yaz, yapay zeka anlatsın</p>
+
+  <textarea id="question" placeholder="Sorunu yaz lan..."></textarea><br>
+  <button onclick="askAI()">AI'ye Sor</button>
+
+  <h2>Cevap 👇</h2>
+  <pre id="answer">Henüz cevap yok</pre>
+
+  <script>
+    async function askAI() {
+      const question = document.getElementById("question").value;
+      const answerBox = document.getElementById("answer");
+
+      if (!question.trim()) {
+        answerBox.textContent = "Bune len, soru yazmadan bastın 😐";
+        return;
+      }
+
+      answerBox.textContent = "Düşünüyorum lan 🤔...";
+
+      try {
+        const res = await fetch("/ask", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ question })
+        });
+
+        const data = await res.json();
+        answerBox.textContent = data.answer;
+      } catch (e) {
+        answerBox.textContent = "Sunucu çöktü lan 💥";
+      }
+    }
+  </script>
+
+</body>
+</html>
